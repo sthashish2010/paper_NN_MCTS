@@ -1,9 +1,9 @@
 from __future__ import print_function
+import numpy as np
+from .TicTacToeLogic import Board
+from Game import Game
 import sys
 sys.path.append('..')
-from Game import Game
-from .TicTacToeLogic import Board
-import numpy as np
 
 """
 Game class implementation for the game of TicTacToe.
@@ -14,6 +14,8 @@ Date: Jan 5, 2018.
 
 Based on the OthelloGame by Surag Nair.
 """
+
+
 class TicTacToeGame(Game):
     def __init__(self, n=3):
         self.n = n
@@ -21,6 +23,7 @@ class TicTacToeGame(Game):
     def getInitBoard(self):
         # return initial board (numpy board)
         b = Board(self.n)
+        print(b)
         return np.array(b.pieces)
 
     def getBoardSize(self):
@@ -38,7 +41,7 @@ class TicTacToeGame(Game):
             return (board, -player)
         b = Board(self.n)
         b.pieces = np.copy(board)
-        move = (int(action/self.n), action%self.n)
+        move = (int(action/self.n), action % self.n)
         b.execute_move(move, player)
         return (b.pieces, -player)
 
@@ -47,12 +50,12 @@ class TicTacToeGame(Game):
         valids = [0]*self.getActionSize()
         b = Board(self.n)
         b.pieces = np.copy(board)
-        legalMoves =  b.get_legal_moves(player)
-        if len(legalMoves)==0:
-            valids[-1]=1
+        legalMoves = b.get_legal_moves(player)
+        if len(legalMoves) == 0:
+            valids[-1] = 1
             return np.array(valids)
         for x, y in legalMoves:
-            valids[self.n*x+y]=1
+            valids[self.n*x+y] = 1
         return np.array(valids)
 
     def getGameEnded(self, board, player):
@@ -67,7 +70,7 @@ class TicTacToeGame(Game):
             return -1
         if b.has_legal_moves():
             return 0
-        # draw has a very little value 
+        # draw has a very little value
         return 1e-4
 
     def getCanonicalForm(self, board, player):
@@ -76,7 +79,7 @@ class TicTacToeGame(Game):
 
     def getSymmetries(self, board, pi):
         # mirror, rotational
-        assert(len(pi) == self.n**2+1)  # 1 for pass
+        assert (len(pi) == self.n**2+1)  # 1 for pass
         pi_board = np.reshape(pi[:-1], (self.n, self.n))
         l = []
 
@@ -100,26 +103,28 @@ class TicTacToeGame(Game):
 
         print("   ", end="")
         for y in range(n):
-            print (y,"", end="")
+            print(y, "", end="")
         print("")
         print("  ", end="")
         for _ in range(n):
-            print ("-", end="-")
+            print("-", end="-")
         print("--")
         for y in range(n):
-            print(y, "|",end="")    # print the row #
+            print(y, "|", end="")    # print the row #
             for x in range(n):
                 piece = board[y][x]    # get the piece to print
-                if piece == -1: print("X ",end="")
-                elif piece == 1: print("O ",end="")
+                if piece == -1:
+                    print("X ", end="")
+                elif piece == 1:
+                    print("O ", end="")
                 else:
-                    if x==n:
-                        print("-",end="")
+                    if x == n:
+                        print("-", end="")
                     else:
-                        print("- ",end="")
+                        print("- ", end="")
             print("|")
 
         print("  ", end="")
         for _ in range(n):
-            print ("-", end="-")
+            print("-", end="-")
         print("--")

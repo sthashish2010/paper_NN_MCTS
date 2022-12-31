@@ -1,3 +1,6 @@
+from .TicTacToeNNet import TicTacToeNNet as onnet
+from NeuralNet import NeuralNet
+from utils import *
 import argparse
 import os
 import shutil
@@ -7,11 +10,7 @@ import numpy as np
 import math
 import sys
 sys.path.append('..')
-from utils import *
-from NeuralNet import NeuralNet
 
-import argparse
-from .TicTacToeNNet import TicTacToeNNet as onnet
 
 """
 NeuralNet wrapper class for the TicTacToeNNet.
@@ -31,6 +30,7 @@ args = dotdict({
     'num_channels': 512,
 })
 
+
 class NNetWrapper(NeuralNet):
     def __init__(self, game):
         self.nnet = onnet(game, args)
@@ -45,7 +45,8 @@ class NNetWrapper(NeuralNet):
         input_boards = np.asarray(input_boards)
         target_pis = np.asarray(target_pis)
         target_vs = np.asarray(target_vs)
-        self.nnet.model.fit(x = input_boards, y = [target_pis, target_vs], batch_size = args.batch_size, epochs = args.epochs)
+        self.nnet.model.fit(x=input_boards, y=[
+                            target_pis, target_vs], batch_size=args.batch_size, epochs=args.epochs)
 
     def predict(self, board):
         """
@@ -69,7 +70,8 @@ class NNetWrapper(NeuralNet):
 
         filepath = os.path.join(folder, filename)
         if not os.path.exists(folder):
-            print("Checkpoint Directory does not exist! Making directory {}".format(folder))
+            print(
+                "Checkpoint Directory does not exist! Making directory {}".format(folder))
             os.mkdir(folder)
         else:
             print("Checkpoint Directory exists! ")
@@ -82,5 +84,5 @@ class NNetWrapper(NeuralNet):
         # https://github.com/pytorch/examples/blob/master/imagenet/main.py#L98
         filepath = os.path.join(folder, filename)
         if not os.path.exists(filepath):
-            raise("No model in path '{}'".format(filepath))
+            print("No model in path '{}'".format(filepath))
         self.nnet.model.load_weights(filepath)
